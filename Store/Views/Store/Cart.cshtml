@@ -1,0 +1,164 @@
+﻿@model List<Store.Models.OrderProduct>
+@using Microsoft.Extensions.Options
+@inject IOptions<Store.Models.StripeSettings> Stripe
+
+@{
+    ViewData["Title"] = "Cart";
+}
+
+@{
+    int i = 0;
+}
+@{
+    decimal sum = 0;
+}
+
+@if (Model.Any())
+{
+    <h2>Your Cart</h2>
+    <br />
+    <table class="table table-striped table-condensed">
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr id="tr-@i">
+                    <td>
+                        <img src="~/images/@item.Product.PhotoPath" alt="" height="40" />
+                    </td>
+                    <td>
+                        @item.Product.Brand.Name @Html.Display(" ") @item.Product.Name
+                    </td>
+                    <td>
+                        @item.Stock.Name
+                        @if (item.Product.CategoryId == 1)
+                        {
+                            @Html.Raw("US")
+                            ;
+                        }
+                    </td>
+                    <td>
+                        <p>Quantity: @item.Qty</p>
+                    </td>
+                    <td>
+                        @{
+                            var cost = item.Product.Price * item.Qty;
+                        }
+                        @cost lkr
+                    </td>
+                    <td>
+                        <button stock-id="@item.StockId" id="remove-@i" class="btn btn-dark btn-sm">Remove from cart</button>
+                    </td>
+                </tr>
+                { i++; }
+                {
+                    sum += item.Product.Price * item.Qty;
+                }
+            }
+        </tbody>
+    </table>
+
+    <br>
+    <div class="container">
+        <div class="row">
+            <div class="col-md-3">
+            </div>
+            <div class="col-md-3">
+            </div>
+            <div class="col-md">
+                Total Price: @sum lkr
+            </div>
+        </div>
+        @{
+            var sum100 = sum * 100;
+        }
+        <br />
+        <br />
+
+        <div class="row">
+            <div class="col-md-4">
+                <button class="btn btn-lg btn-warning" onclick="location.href = '@Url.Action("ShippingInformation", "Store")'">Shipping Information</button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-lg btn-warning" id="remove-all-items-js">Clear Cart</button>
+            </div>
+            <div class="col-md-4">
+                <button class="btn btn-lg btn-dark" onclick="location.href = '@Url.Action("Index", "Store")'">Back to Store</button>
+            </div>
+        </div>
+        <div class="row" style="margin-bottom:20px; margin-top:50px; margin-left:35%;">
+            <div>
+                <form action="Payment" method="POST">
+                    <script src="https://checkout.stripe.com/checkout.js"
+                            class="stripe-button"
+                            data-key="@Stripe.Value.PublishableKey"
+                            data-amount="@sum100"
+                            data-name="Store"
+                            data-description="You are one step away from your order!"
+                            data-image="/images/shoelogo.png"
+                            data-locale="auto"
+                            data-label="Pay @sum LKR"
+                            data-panel-label="Pay"
+                            data-currency="LKR">
+                    </script>
+                </form>
+            </div>
+        </div>
+    </div>
+    <br />
+    <p>The test card number is: 4200 4242 0000 4242</p>
+}
+else
+{
+    <h1>Your cart is empty :(</h1>
+    <img src="~/images/smutnazaba.png" />
+}
+
+@section scripts {
+    <script>
+        $(document).ready(function () {
+            removeItemFromCartHandler();
+
+            $('#remove-all-items-js').click(function () {
+                removeAllItemsFromCart();
+                location.reload();
+            });
+        });
+
+        var removeItemFromCartHandler = function () {
+            for (var i = 0; i < '@i'; i++) {
+                $('#remove-'.concat(i)).click(function () {
+                    var data = new FormData();
+
+                    var stockId = $(this).attr('stock-id');
+
+                    data.append('stockId', stockId);
+
+                    var ajaxConfig = {
+                        type: "POST",
+                        url: "/Store/DeleteFromCart",
+                        data: data,
+                        processData: false,
+                        contentType: false,
+                        success: function (response) {
+                            //alert('Successfully removed!');
+                            location.reload();
+                        },
+                        error: function (xhr, status) {
+                            alert('Something went wrong :///');
+                        }
+                    }
+
+                    $.ajax(ajaxConfig);
+                });
+            }
+        }
+
+        var removeAllItemsFromCart = function () {
+            document.cookie.split(";")
+                .forEach(function (c) {
+                    document.cookie = c.replace(/^ +/, "")
+                        .replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+                });
+        }
+    </script>
+}

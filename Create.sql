@@ -1,0 +1,138 @@
+-- Use the new database
+USE Store;
+GO
+
+-- Create Tables
+CREATE TABLE Brands (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(MAX) NOT NULL,
+    Description NVARCHAR(MAX) NULL,
+    PhotoPath NVARCHAR(MAX) NULL
+);
+
+CREATE TABLE Categories (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(MAX) NOT NULL
+);
+
+CREATE TABLE Colors (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(MAX) NOT NULL
+);
+
+CREATE TABLE Genders (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(MAX) NOT NULL
+);
+
+CREATE TABLE Products (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(MAX) NOT NULL,
+    PhotoPath NVARCHAR(MAX) NULL,
+    Price DECIMAL(15, 2) NOT NULL,
+    ColorId INT NULL FOREIGN KEY REFERENCES Colors(Id),
+    BrandId INT NULL FOREIGN KEY REFERENCES Brands(Id),
+    GenderId INT NOT NULL FOREIGN KEY REFERENCES Genders(Id),
+    Description NVARCHAR(MAX) NULL,
+    CategoryId INT NOT NULL FOREIGN KEY REFERENCES Categories(Id)
+);
+
+CREATE TABLE Users (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    UserName NVARCHAR(256) NULL,
+    NormalizedUserName NVARCHAR(256) NULL,
+    Email NVARCHAR(256) NULL,
+    NormalizedEmail NVARCHAR(256) NULL,
+    EmailConfirmed BIT NOT NULL,
+    PasswordHash NVARCHAR(MAX) NULL,
+    SecurityStamp NVARCHAR(MAX) NULL,
+    ConcurrencyStamp NVARCHAR(MAX) NULL,
+    PhoneNumberConfirmed BIT NOT NULL,
+    TwoFactorEnabled BIT NOT NULL,
+    LockoutEnd DATETIMEOFFSET NULL,
+    LockoutEnabled BIT NOT NULL,
+    AccessFailedCount INT NOT NULL,
+    FirstName NVARCHAR(25) NOT NULL,
+    LastName NVARCHAR(25) NOT NULL,
+    GenderId INT NOT NULL FOREIGN KEY REFERENCES Genders(Id),
+    PhoneNumber NVARCHAR(MAX) NULL,
+    PhotoPath NVARCHAR(MAX) NULL,
+    Address1 NVARCHAR(MAX) NULL,
+    Address2 NVARCHAR(MAX) NULL,
+    City NVARCHAR(MAX) NULL,
+    PostCode NVARCHAR(MAX) NULL
+);
+
+CREATE TABLE Orders (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Address1 NVARCHAR(MAX) NOT NULL,
+    Address2 NVARCHAR(MAX) NULL,
+    City NVARCHAR(MAX) NOT NULL,
+    PostCode NVARCHAR(MAX) NOT NULL,
+    FirstName NVARCHAR(MAX) NOT NULL,
+    LastName NVARCHAR(MAX) NOT NULL,
+    Email NVARCHAR(MAX) NULL,
+    UserId INT NULL FOREIGN KEY REFERENCES Users(Id),
+    IsSent BIT NOT NULL DEFAULT 0,
+    OrderDate DATETIME2 NOT NULL,
+    OrderSentDate DATETIME2 NULL
+);
+
+CREATE TABLE Stock (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Quantity INT NOT NULL,
+    ProductId INT NOT NULL FOREIGN KEY REFERENCES Products(Id),
+    Name NVARCHAR(MAX) NOT NULL,
+    IsLastElementOrdered BIT NOT NULL DEFAULT 0
+);
+
+CREATE TABLE OrderProducts (
+    ProductId INT NULL FOREIGN KEY REFERENCES Products(Id),
+    OrderId INT NOT NULL FOREIGN KEY REFERENCES Orders(Id),
+    StockId INT NOT NULL FOREIGN KEY REFERENCES Stock(Id),
+    Quantity INT NOT NULL,
+    PRIMARY KEY (StockId, OrderId)
+);
+
+CREATE TABLE Roles (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    Name NVARCHAR(256) NULL,
+    NormalizedName NVARCHAR(256) NULL,
+    ConcurrencyStamp NVARCHAR(MAX) NULL
+);
+
+CREATE TABLE UserRoles (
+    UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
+    RoleId INT NOT NULL FOREIGN KEY REFERENCES Roles(Id),
+    PRIMARY KEY (UserId, RoleId)
+);
+
+CREATE TABLE RoleClaims (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    RoleId INT NOT NULL FOREIGN KEY REFERENCES Roles(Id),
+    ClaimType NVARCHAR(MAX) NULL,
+    ClaimValue NVARCHAR(MAX) NULL
+);
+
+CREATE TABLE UserClaims (
+    Id INT IDENTITY(1,1) PRIMARY KEY,
+    UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
+    ClaimType NVARCHAR(MAX) NULL,
+    ClaimValue NVARCHAR(MAX) NULL
+);
+
+CREATE TABLE UserLogins (
+    LoginProvider NVARCHAR(450) NOT NULL,
+    ProviderKey NVARCHAR(450) NOT NULL,
+    ProviderDisplayName NVARCHAR(MAX) NULL,
+    UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
+    PRIMARY KEY (LoginProvider, ProviderKey)
+);
+
+CREATE TABLE UserTokens (
+    UserId INT NOT NULL FOREIGN KEY REFERENCES Users(Id),
+    LoginProvider NVARCHAR(450) NOT NULL,
+    Name NVARCHAR(450) NOT NULL,
+    Value NVARCHAR(MAX) NULL,
+    PRIMARY KEY (UserId, LoginProvider, Name)
+);

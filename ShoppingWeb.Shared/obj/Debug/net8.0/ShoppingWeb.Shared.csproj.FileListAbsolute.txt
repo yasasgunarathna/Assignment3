@@ -1,0 +1,12 @@
+C:\Users\LENOVO\source\repos\ShoppingWebApplication\ShoppingWeb.Shared\bin\Debug\net8.0\ShoppingWeb.Shared.deps.json
+C:\Users\LENOVO\source\repos\ShoppingWebApplication\ShoppingWeb.Shared\bin\Debug\net8.0\ShoppingWeb.Shared.dll
+C:\Users\LENOVO\source\repos\ShoppingWebApplication\ShoppingWeb.Shared\bin\Debug\net8.0\ShoppingWeb.Shared.pdb
+C:\Users\LENOVO\source\repos\ShoppingWebApplication\ShoppingWeb.Shared\obj\Debug\net8.0\ShoppingWeb.Shared.csproj.AssemblyReference.cache
+C:\Users\LENOVO\source\repos\ShoppingWebApplication\ShoppingWeb.Shared\obj\Debug\net8.0\ShoppingWeb.Shared.GeneratedMSBuildEditorConfig.editorconfig
+C:\Users\LENOVO\source\repos\ShoppingWebApplication\ShoppingWeb.Shared\obj\Debug\net8.0\ShoppingWeb.Shared.AssemblyInfoInputs.cache
+C:\Users\LENOVO\source\repos\ShoppingWebApplication\ShoppingWeb.Shared\obj\Debug\net8.0\ShoppingWeb.Shared.AssemblyInfo.cs
+C:\Users\LENOVO\source\repos\ShoppingWebApplication\ShoppingWeb.Shared\obj\Debug\net8.0\ShoppingWeb.Shared.csproj.CoreCompileInputs.cache
+C:\Users\LENOVO\source\repos\ShoppingWebApplication\ShoppingWeb.Shared\obj\Debug\net8.0\ShoppingWeb.Shared.dll
+C:\Users\LENOVO\source\repos\ShoppingWebApplication\ShoppingWeb.Shared\obj\Debug\net8.0\refint\ShoppingWeb.Shared.dll
+C:\Users\LENOVO\source\repos\ShoppingWebApplication\ShoppingWeb.Shared\obj\Debug\net8.0\ShoppingWeb.Shared.pdb
+C:\Users\LENOVO\source\repos\ShoppingWebApplication\ShoppingWeb.Shared\obj\Debug\net8.0\ref\ShoppingWeb.Shared.dll

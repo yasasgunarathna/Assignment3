@@ -1,0 +1,11 @@
+{
+  "Version": 1,
+  "Hash": "LiG0+fAwHZuPyc95m3Sj2EdZy6YEp3kNKqz4LHVeg4k=",
+  "Source": "ShoppingWeb.API",
+  "BasePath": "_content/ShoppingWeb.API",
+  "Mode": "Default",
+  "ManifestType": "Build",
+  "ReferencedProjectsConfiguration": [],
+  "DiscoveryPatterns": [],
+  "Assets": []
+}
